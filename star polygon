@@ -1,0 +1,72 @@
+def coord_plane():
+    sheet.tracer(0, 0)
+    for i in range(4):
+        for j in range(10):
+            dude.forward(100)
+            dude.left(90)
+            dude.forward(5)
+            dude.forward(-10)
+            dude.forward(5)
+            dude.right(90)
+        dude.goto(0, 0)
+        dude.left(90)
+    sheet.tracer(1, 10)
+
+import turtle
+import sys
+import math
+
+x = int(input("x coordinate: "))
+y = int(input("y coordinate: "))
+circ_r = int(input("polygon size: "))
+n = int(input("how many sides?: "))
+step = int(input("Star density?: "))
+
+if step >= n or step < 1:
+    print("step should be greater than zero and less than the number of vertices")
+    sys.exit()
+
+#calculations for center
+rad = math.radians(180 / n)    #convert (180 / n) degrees to radians
+in_r = circ_r * math.cos(rad)    #radius of incircle
+side = in_r * 2 * math.tan(rad)    #side length
+
+
+turn = 360 / n    #turn angle
+
+sheet = turtle.Screen()
+dude = turtle.Turtle()
+
+coord_plane()
+
+#adjust starting point
+x -= side / 2
+y -= in_r
+
+#move the turtle to starting point
+dude.penup()
+dude.goto(x, y)
+dude.pendown()
+
+
+#draw a polygon and record coordinates of the vertices
+vertices = []
+for i in range(n):
+    vertices.append(dude.pos())
+    dude.forward(side)
+    dude.left(turn)
+
+#draw a star polygon
+starting_index = step
+while True:
+    dude.goto(vertices[starting_index])
+    starting_index += step
+    if starting_index >= len(vertices):
+        starting_index -= n
+        
+        
+        
+    if ((x - dude.pos()[0])**2 + (y - dude.pos()[1]))**0.5 < 1:
+        break
+    
+sheet.mainloop()
