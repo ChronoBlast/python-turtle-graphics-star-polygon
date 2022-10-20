@@ -1,16 +1,27 @@
-def coord_plane():
-    sheet.tracer(0, 0)
+#this function draws the coordinate plane
+def coord_plane(turtle_name, sheet_name):
+    sheet_name.tracer(0, 0)
     for i in range(4):
         for j in range(10):
-            dude.forward(100)
-            dude.left(90)
-            dude.forward(5)
-            dude.forward(-10)
-            dude.forward(5)
-            dude.right(90)
-        dude.goto(0, 0)
-        dude.left(90)
-    sheet.tracer(1, 10)
+            turtle_name.forward(100)
+            turtle_name.left(90)
+            turtle_name.forward(5)
+            turtle_name.forward(-10)
+            turtle_name.forward(5)
+            turtle_name.right(90)
+        turtle_name.goto(0, 0)
+        turtle_name.left(90)
+    sheet_name.tracer(1, 10)
+
+#calculates the starting point and side length
+def pol_center(n_sides, pol_size, x, y):
+    rad = math.radians(180 / n_sides)    #convert (180 / n) degrees to radians
+    in_r = pol_size * math.cos(rad)    #radius of incircle
+    side = in_r * 2 * math.tan(rad)    #side length
+    x -= side / 2
+    y -= in_r 
+    return ([in_r, side, x, y])
+
 
 import turtle
 import sys
@@ -26,34 +37,36 @@ if step >= n or step < 1:
     print("step should be greater than zero and less than the number of vertices")
     sys.exit()
 
-#calculations for center
-rad = math.radians(180 / n)    #convert (180 / n) degrees to radians
-in_r = circ_r * math.cos(rad)    #radius of incircle
-side = in_r * 2 * math.tan(rad)    #side length
-
 
 turn = 360 / n    #turn angle
 
-sheet = turtle.Screen()
+sheet = turtle.Screen()    #create screen and turtle
 dude = turtle.Turtle()
 
-coord_plane()
+coord_plane(dude, sheet)    #draw x and y axis
 
-#adjust starting point
-x -= side / 2
-y -= in_r
+
+f = pol_center(n, circ_r, x, y)
+
+inradius = f[0]    #inscribed circle radius
+
+side_l = f[1]    #side length
+
+#starting point
+x = f[2]
+y = f[3]
 
 #move the turtle to starting point
 dude.penup()
 dude.goto(x, y)
 dude.pendown()
-
+sheet.tracer(1, 0)
 
 #draw a polygon and record coordinates of the vertices
 vertices = []
 for i in range(n):
     vertices.append(dude.pos())
-    dude.forward(side)
+    dude.forward(side_l)
     dude.left(turn)
 
 #draw a star polygon
@@ -66,7 +79,7 @@ while True:
         
         
         
-    if ((x - dude.pos()[0])**2 + (y - dude.pos()[1]))**0.5 < 1:
+    if ((x - dude.pos()[0])**2 + (y - dude.pos()[1])**2)**0.5 < 1:
         break
     
 sheet.mainloop()
