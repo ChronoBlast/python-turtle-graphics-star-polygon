@@ -14,27 +14,35 @@ def coord_plane(turtle_name, sheet_name):
     sheet_name.tracer(1, 10)
 
 #calculates the starting point and side length
-def pol_center(n_sides, pol_size, x, y):
-    rad = math.radians(180 / n_sides)    #convert (180 / n) degrees to radians
-    in_r = pol_size * math.cos(rad)    #radius of incircle
-    side = in_r * 2 * math.tan(rad)    #side length
-    x -= side / 2
-    y -= in_r 
-    return ([in_r, side, x, y])
+def pol_center(number_of_sides, pol_size, x, y):
+    radians = math.radians(180 / number_of_sides)    #convert (180 / n) degrees to radians
+    inradius = pol_size * math.cos(radians)    #radius of incircle
+    side_len = inradius * 2 * math.tan(radians)    #side length
+    x -= side_len / 2
+    y -= inradius 
+    return [inradius, side_len, x, y]
 
 
 import turtle
 import sys
 import math
 
+#which point to center polygon at
 x = int(input("x coordinate: "))
 y = int(input("y coordinate: "))
-circ_r = int(input("polygon size: "))
+
+#this is the radius of circumscribed circle, defines the size of the polygon
+polygon_size = int(input("polygon size: "))
+
+#number of sides of the polygon
 n = int(input("how many sides?: "))
+
+#this is the polygon density q, also called turning number from the Schläfli symbol {p/q},
+#where p - number of vertices. 
 step = int(input("Star density?: "))
 
 if step >= n or step < 1:
-    print("step should be greater than zero and less than the number of vertices")
+    print("step should be greater than zero and less than the number of list_of_vertices")
     sys.exit()
 
 
@@ -46,11 +54,11 @@ dude = turtle.Turtle()
 coord_plane(dude, sheet)    #draw x and y axis
 
 
-f = pol_center(n, circ_r, x, y)
+f = pol_center(n, polygon_size, x, y)
 
 inradius = f[0]    #inscribed circle radius
 
-side_l = f[1]    #side length
+side_length = f[1]    #side length
 
 #starting point
 x = f[2]
@@ -62,19 +70,19 @@ dude.goto(x, y)
 dude.pendown()
 sheet.tracer(1, 0)
 
-#draw a polygon and record coordinates of the vertices
-vertices = []
+#draw a polygon and record coordinates of the list_of_vertices
+list_of_vertices = []
 for i in range(n):
-    vertices.append(dude.pos())
-    dude.forward(side_l)
+    list_of_vertices.append(dude.pos())
+    dude.forward(side_length)
     dude.left(turn)
 
 #draw a star polygon
 starting_index = step
 while True:
-    dude.goto(vertices[starting_index])
+    dude.goto(list_of_vertices[starting_index])
     starting_index += step
-    if starting_index >= len(vertices):
+    if starting_index >= len(list_of_vertices):
         starting_index -= n
         
         
