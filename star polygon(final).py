@@ -190,7 +190,6 @@ button_dict["show"] = make_button(270, -400, "show/hide polygon")
 
 make_up_button(110, -400, "upd values")
 
-#TODO make an option to show or hide the polygon (only show the star)
 
 #polygon size, number of sides and star density
 polygon_size = 200
